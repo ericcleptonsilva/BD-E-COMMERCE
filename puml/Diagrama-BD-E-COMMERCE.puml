@@ -1,0 +1,96 @@
+@startuml
+'default
+top to bottom direction
+title E-Commerce
+
+/' Tabela Cliente '/
+map Cliente {
+IdCliente => INT
+Nome => VARCHAR(45)
+Identificação => VARCHAR(45)
+endereço => VARCHAR(45)
+}
+
+/' Tabela Pedido'/
+map Pedido {
+IdPedido => INT
+Status do pedido => VARCHAR(45)
+descrição => VARCHAR(45)
+Cliente_IdCliente => INT
+Frete => FLOAT
+}
+
+/'Relacionamento com Cliente e Pedido '/
+Cliente::IdCliente --> Pedido::Cliente_IdCliente: "1" " 1..*" 
+
+/' Tabela Produtos'/
+map Produto {
+IdProduto => INT
+Produtos => VARCHAR(45)
+Categoria => VARCHAR(45)
+descrição => VARCHAR(45)
+Valor => VARCHAR(45)
+}
+
+/' Tabela de Relacionameto Produto e Cliente'/
+map Relação_Produto_has_Pedido{
+Produto_IdProduto => INT
+Pedido_IdPedido  => INT
+Quantidade => INT
+}
+
+/'Relacionamento com Produto e Pedido '/
+Produto::IdProduto --> Relação_Produto_has_Pedido::Produto_IdProduto : "1" " 1..*"
+Pedido::IdPedido --> Relação_Produto_has_Pedido::Pedido_IdPedido : "1" " 1..*"
+/' Tabela Fornecedor '/
+map Fornecedor {
+IdFornecedor => INT
+Razão Social => VARCHAR(45)
+CNPJ => VARCHAR(45)
+}
+
+/' Tabela de Relacionameto Produto e Fornecedor'/
+map Fornecedor_has_Produto {
+Fornecedor_IdFornecedor => INT
+Produto_IdProdutos => INT
+}
+
+/'Relacionamento com Produto e Fornecedor'/
+Produto::IdProduto --> Fornecedor_has_Produto::Produto_IdProdutos : "1" " 1..*"
+Fornecedor::IdFornecedor --> Fornecedor_has_Produto::Fornecedor_IdFornecedor : "1" " 1..*"
+
+/' Tabela Terceiro Vendedor'/
+map Terceiro_Vendedor {
+IdTerceiroVendedor => INT
+Razão Social => VARCHAR(45)
+Local => VARCHAR(45)
+}
+
+/' Tabela de Relacionamento Produto e Terceiro Vendedor'/
+map Terceiro_Vendedor_has_Produto {
+Terceiro_Vendedor_IdTerceiroVendedor => INT
+Produto_IdProdutos => INT
+Quantidade => INT
+}
+
+/'Relacionamento com Produto e Terceiro Vendedor'/
+Produto::IdProduto --> Terceiro_Vendedor_has_Produto::Produto_IdProdutos: "1" " 1..*"
+Terceiro_Vendedor::IdTerceiroVendedor --> Terceiro_Vendedor_has_Produto::Terceiro_Vendedor_IdTerceiroVendedor : "1" " 1..*"
+
+/' Tabela Estoque '/
+map Estoque {
+IdEstoque => INT
+Local => VARCHAR(45)
+}
+
+/' Tabela de Relacionameto Produto e Estoque'/
+map Produto_has_Estoque{
+Produto_IdProduto => INT
+Estoque_IdEstoque => INT
+Quantidade => INT
+}
+
+/'Relacionamento com Produto e Estoque'/
+Produto::IdProduto --> Produto_has_Estoque::Produto_IdProduto : "1" " 1..*"
+Estoque::IdEstoque  --> Produto_has_Estoque::Estoque_IdEstoque : "1" " 1..*"
+@enduml
