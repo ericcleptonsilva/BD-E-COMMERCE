@@ -8,4 +8,4 @@
 
 ![uncached image](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://github.com/ericcleptonsilva/BD-E-COMMERCE/blob/master/puml/Diagrama-BD-E-COMMERCE.puml)
 
-![cached image](http://www.plantuml.com/plantuml/proxy?src=https://github.com/ericcleptonsilva/BD-E-COMMERCE/blob/master/puml/Diagrama-BD-E-COMMERCE.puml)
+![cached image](http://www.plantuml.com/plantuml/proxy?src=https://github.com/ericcleptonsilva/BD-E-COMMERCE/blob/master/puml/Diagrama-BD-E-COMMERCE.txt)
