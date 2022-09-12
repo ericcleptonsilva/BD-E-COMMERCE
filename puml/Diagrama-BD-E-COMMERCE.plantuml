@@ -95,8 +95,4 @@ Fornecedor::IdFornecedor -down-> Fornecedor_has_Produto::Fornecedor_IdFornecedor
 Produto::IdProduto -down-> Terceiro_Vendedor_has_Produto::Produto_IdProdutos: "1" " 1..*"
 Terceiro_Vendedor::IdTerceiroVendedor -up-> Terceiro_Vendedor_has_Produto::Terceiro_Vendedor_IdTerceiroVendedor : "1" " 1..*"
 
-
-
-
-
 @enduml
