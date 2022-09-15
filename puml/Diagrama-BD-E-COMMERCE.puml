@@ -2,28 +2,45 @@
 
 title E-Commerce
 
-
+/' Tabela Pessoa Fisica'/
+entity Pessoa_Fisica {
+IdPessoaFisica : INT <<PK>><<NN>>
+--
+CPF : VARCHAR(45)
+--
+Cliente_IdCliente :INT
+}
+/' Tabela Pessoa Fisica'/
+entity Pessoa_Juridica {
+IdPessoaJuridica : INT <<PK>><<NN>>
+--
+CNPJ : VARCHAR(45)
+--
+Razão Social : VARCHAR(45)
+--
+Cliente_IdCliente : INT
+}
 
 /' Tabela Cliente '/
 entity Cliente {
 IdCliente : INT <<PK>> <<NN>>
 --
-Nome VARCHAR(45)
+Nome : VARCHAR(45)
 --
-Identificação  VARCHAR(45)
+Identificação : VARCHAR(45)
 --
-endereço  VARCHAR(45)
+endereço  : VARCHAR(45)
 }
 
 /' Tabela Pedido'/
 entity Pedido {
 IdPedido : INT <<PK>> <<NN>>
 --
-Status do pedido VARCHAR(45)
+Status do pedido : : VARCHAR(45)
 --
-descrição VARCHAR(45)
+descrição : VARCHAR(45)
 --
-Cliente_IdCliente INT
+Cliente_IdCliente : INT
 --
 Frete FLOAT
 }
@@ -32,47 +49,86 @@ Frete FLOAT
 entity Produto {
 IdProduto : INT <<PK>> <<NN>>
 --
-Produtos VARCHAR(45)
+Produtos : VARCHAR(45)
 --
-Categoria VARCHAR(45)
+Categoria : VARCHAR(45)
 --
-descrição VARCHAR(45)
+descrição : VARCHAR(45)
 --
-Valor VARCHAR(45)
+Valor : VARCHAR(45)
 }
 
 /' Tabela Fornecedor '/
 entity Fornecedor {
 IdFornecedor : INT <<PK>> <<NN>>
 --
-Razão Social VARCHAR(45)
+Razão Social : VARCHAR(45)
 --
-CNPJ VARCHAR(45)
+CNPJ : VARCHAR(45)
 }
 
 /' Tabela Terceiro Vendedor'/
 entity Terceiro_Vendedor {
 IdTerceiroVendedor : INT <<PK>> <<NN>>
 --
-Razão Social VARCHAR(45)
+Razão Social : VARCHAR(45)
 --
-Local VARCHAR(45)
+Local : VARCHAR(45)
 }
 
 /' Tabela Estoque '/
 entity Estoque {
 IdEstoque : INT <<PK>> <<NN>>
 --
-Local VARCHAR(45)
+Local : VARCHAR(45)
+}
+/' Tabela Forma de pagamentos Boleto '/
+entity Boleto {
+IdBoleto : INT <<PK>> <<NN>>
+--
+Valor : VARCHAR(45)
+--
+Vencimento : VARCHAR(45)
+}
+
+/' Tabela Forma de pagamentos Cartão de credito '/
+entity CartaoCredito {
+IdCartaoCredito : INT <<PK>> <<NN>>
+--
+Chave : VARCHAR(45)
+--
+Validade : VARCHAR(45)
+--
+Valor : VARCHAR(45)
+}
+/' Tabela Entrega '/
+entity Entrega {
+IdEntrega: INT <<PK>> <<NN>>
+--
+Status : VARCHAR(45) /' Status poderia ter uma tabela de codigo de entrega '/
+--
+CodRastramento: VARCHAR(45)
 }
 
 /' Tabela de Relacionameto Produto e Cliente'/
-entity Relação_Produto_has_Pedido {
-Produto_IdProduto INT
---
+entity Relação_Pedido_has_Entrega {
 Pedido_IdPedido  INT
 --
+Entrega_IdEntrega INT
+--
 Quantidade INT
+}
+/' Tabela de Relacionameto Pedido e Boleto'/
+entity Relação_Pedido_has_Boleto {
+Pedido_IdPedido  INT
+--
+Boleto_IdBoleto INT
+}
+/' Tabela de Relacionameto Pedido e Cartão de credito'/
+entity Relação_Pedido_has_CartaoCredito {
+Pedido_IdPedido  INT
+--
+CartaoCredito_IdCartaoCredito INT
 }
 
 /' Tabela de Relacionameto Produto e Fornecedor'/
@@ -92,7 +148,7 @@ Quantidade INT
 }
 
 /' Tabela de Relacionameto Produto e Estoque'/
-entity Produto_has_Estoque{
+entity Produto_has_Estoque {
 Produto_IdProduto INT
 --
 Estoque_IdEstoque INT
@@ -101,22 +157,36 @@ Quantidade INT
 }
 
 /'Relacionamento com Cliente e Pedido '/
-Cliente::IdCliente -down-> Pedido::Cliente_IdCliente : "1" " 1..*" 
+Cliente -down-* Pedido : "1" " 1..*" 
+/'Relacionamento com o tipo de Pessoa Fisica ou Juricada e Cliente '/
+Cliente *-up- Pessoa_Fisica : "1..*" " 1" 
+Cliente -up-* Pessoa_Juridica: "1" " 1..*" 
 
 /'Relacionamento com Produto e Pedido '/
-Produto::IdProduto -up-> Relação_Produto_has_Pedido::Produto_IdProduto : "1" " 1..*"
-Pedido::IdPedido -down-> Relação_Produto_has_Pedido::Pedido_IdPedido : "1" " 1..*"
+Produto -up-* Relação_Produto_has_Pedido : "1" " 1..*"
+Pedido -down-* Relação_Produto_has_Pedido : "1" " 1..*"
 
 /'Relacionamento com Produto e Estoque'/
-Produto::IdProduto -down-> Produto_has_Estoque::Produto_IdProduto : "1" " 1..*"
-Estoque::IdEstoque  -down-> Produto_has_Estoque::Estoque_IdEstoque : "1" " 1..*"
+Produto -down-* Produto_has_Estoque : "1" " 1..*"
+Estoque -down-* Produto_has_Estoque : "1" " 1..*"
 
 /'Relacionamento com Produto e Fornecedor'/
-Produto::IdProduto -up-> Fornecedor_has_Produto::Produto_IdProdutos : "1" " 1..*"
-Fornecedor::IdFornecedor -down-> Fornecedor_has_Produto::Fornecedor_IdFornecedor : "1" " 1..*"
+Produto -up-* Fornecedor_has_Produto : "1" " 1..*"
+Fornecedor -down-* Fornecedor_has_Produto : "1" " 1..*"
 
 /'Relacionamento com Produto e Terceiro Vendedor'/
-Produto::IdProduto -down-> Terceiro_Vendedor_has_Produto::Produto_IdProdutos: "1" " 1..*"
-Terceiro_Vendedor::IdTerceiroVendedor -up-> Terceiro_Vendedor_has_Produto::Terceiro_Vendedor_IdTerceiroVendedor : "1" " 1..*"
+Produto -down-* Terceiro_Vendedor_has_Produto : "1" " 1..*"
+Terceiro_Vendedor -up-* Terceiro_Vendedor_has_Produto : "1" " 1..*"
+
+/'Relacionamento com Pedido e Forma de Pagamentos '/
+Boleto -down-* Relação_Pedido_has_Boleto : "1" " 1..*" 
+Pedido *-up- Relação_Pedido_has_Boleto : "1..*" " 1" 
+CartaoCredito -up-* Relação_Pedido_has_CartaoCredito : "1" " 1..*" 
+Pedido *-left- Relação_Pedido_has_CartaoCredito : "1" " 1..*" 
+
+/'Relacionamento com Entrega '/
+Entrega -up-* Relação_Pedido_has_Entrega : "1" "1..*"
+Pedido -up-* Relação_Pedido_has_Entrega : "1..*" "1"
+
 
 @enduml
